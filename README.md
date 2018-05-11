@@ -40,6 +40,10 @@ git clone git clone https://github.com/lakshmi-mahabaleshwara/CustomerSales-Demo
 mvn clean install<br>
 java -jar ~/CustomerSales-Demo/target/customersales-0.0.1-SNAPSHOT.jar<br>
 
+#### Healthcheck endpoint
+http://localhost:8080/health <br>
+http://intuitcus-elasticl-11xxi0hlbd9bm-1213420232.us-west-1.elb.amazonaws.com/health <br>
+
 #### Swagger URL's
 Localhost and Cloud url<br>
 http://localhost:8080/swagger-ui.html#/ <br>
@@ -63,7 +67,6 @@ http://intuitcus-elasticl-11xxi0hlbd9bm-1213420232.us-west-1.elb.amazonaws.com/s
 http://intuitcus-elasticl-11xxi0hlbd9bm-1213420232.us-west-1.elb.amazonaws.com/spark/salesByDay<br>
 http://intuitcus-elasticl-11xxi0hlbd9bm-1213420232.us-west-1.elb.amazonaws.com/spark/salesByYear<br>
 http://intuitcus-elasticl-11xxi0hlbd9bm-1213420232.us-west-1.elb.amazonaws.com/spark/salesByMonth<br>
-
 
 #### AWS Deployment Diagram:
 
