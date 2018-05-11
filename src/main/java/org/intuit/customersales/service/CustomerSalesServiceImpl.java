@@ -64,18 +64,19 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 
 	/**
 	 * Returns the total sales for the state.
+	 * 
 	 * @returns List<String> in the format "AL#247316"
 	 */
 	@Override
 	public List<String> getStateTotalSales() throws Exception {
 		List<String> result = new ArrayList<>();
 		try {
-			
-			if(set == null) {
+
+			if (set == null) {
 				LOGGER.error("Set is empty while calculating total sales");
 				return result;
 			}
-			
+
 			for (Map.Entry<String, Iterable<Long>> sales : set) {
 				long total = 0;
 				Iterator<Long> itr = sales.getValue().iterator();
@@ -96,6 +97,7 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 
 	/**
 	 * Returns the Sales by hour for given state
+	 * 
 	 * @returns List<String> in the format "AL#2018#5#9#12#100"
 	 */
 	@Override
@@ -105,6 +107,7 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 
 	/**
 	 * Returns the Sales by month for given state
+	 * 
 	 * @returns List<String> in the format "AL#2018#5###100"
 	 */
 	@Override
@@ -114,6 +117,7 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 
 	/**
 	 * Returns the Sales by day for given state
+	 * 
 	 * @returns List<String> in the format ""AL#2018#5#9##100""
 	 */
 	@Override
@@ -123,6 +127,7 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 
 	/**
 	 * Returns the Sales by year for given state
+	 * 
 	 * @returns List<String> in the format ""AL#2018####100""
 	 */
 	@Override
@@ -136,11 +141,11 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 	private List<String> getResultsFromRdd(String param) throws Exception {
 		List<String> result = new ArrayList<>();
 		try {
-			if(list == null) {
+			if (list == null) {
 				LOGGER.error("List is empty while getting sales by " + param + " for state");
 				return result;
 			}
-			
+
 			for (Tuple2<Integer, Tuple2<Sale, Customer>> tuple : list) {
 				Tuple2<Sale, Customer> tuple2 = (Tuple2<Sale, Customer>) tuple._2();
 				Sale sale = (Sale) tuple2._1();

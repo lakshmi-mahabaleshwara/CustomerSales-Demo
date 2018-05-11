@@ -22,15 +22,11 @@ public class CustomerSalesApplication {
 	public Docket productApi() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
 				.apis(RequestHandlerSelectors.basePackage("org.intuit.customersales.controller"))
-				.paths(PathSelectors.ant("/spark/*"))
-				.build().apiInfo(metaData());
+				.paths(PathSelectors.ant("/spark/*")).build().apiInfo(metaData());
 	}
-	
+
 	private ApiInfo metaData() {
-        return new ApiInfoBuilder()
-                .title("Spring Boot REST API")
-                .description("\"Spring Boot REST API for Customer Sales Spark Application\"")
-                .version("1.0.0")
-                .build();
-    }
+		return new ApiInfoBuilder().title("Spring Boot REST API")
+				.description("\"Spring Boot REST API for Customer Sales Spark Application\"").version("1.0.0").build();
+	}
 }

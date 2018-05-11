@@ -19,51 +19,51 @@ import org.springframework.test.web.servlet.MockMvc;
 @RunWith(SpringRunner.class)
 @WebMvcTest(CustomerSalesApiController.class)
 public class CustomerSalesApiControllerTest {
-	
+
 	@Autowired
-    private MockMvc mockMvc;
-	
+	private MockMvc mockMvc;
+
 	@MockBean
 	private CustomerSalesService customerSalesService;
-		
+
 	@Test
-    public void getTotalSalesForState() throws Exception {
+	public void getTotalSalesForState() throws Exception {
 		String jsonContent = "[\"AL#247316\"]";
 		when(customerSalesService.getStateTotalSales()).thenReturn(Arrays.asList("AL#247316"));
-        this.mockMvc.perform(get("/spark/totalSales")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().json(jsonContent));
-    }
-	
+		this.mockMvc.perform(get("/spark/totalSales")).andDo(print()).andExpect(status().isOk())
+				.andExpect(content().json(jsonContent));
+	}
+
 	@Test
-    public void getSalesByHour() throws Exception {
+	public void getSalesByHour() throws Exception {
 		String jsonContent = "[\"AL#2018#5#9#12#100\"]";
 		when(customerSalesService.getSalesByHour()).thenReturn(Arrays.asList("AL#2018#5#9#12#100"));
-        this.mockMvc.perform(get("/spark/salesByHour")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().json(jsonContent));
-    }
-	
+		this.mockMvc.perform(get("/spark/salesByHour")).andDo(print()).andExpect(status().isOk())
+				.andExpect(content().json(jsonContent));
+	}
+
 	@Test
-    public void getSalesByMonth() throws Exception {
+	public void getSalesByMonth() throws Exception {
 		String jsonContent = "[\"AL#2018#5###100\"]";
 		when(customerSalesService.getSalesByMonth()).thenReturn(Arrays.asList("AL#2018#5###100"));
-        this.mockMvc.perform(get("/spark/salesByMonth")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().json(jsonContent));
-    }
-	
+		this.mockMvc.perform(get("/spark/salesByMonth")).andDo(print()).andExpect(status().isOk())
+				.andExpect(content().json(jsonContent));
+	}
+
 	@Test
-    public void getSalesByDay() throws Exception {
+	public void getSalesByDay() throws Exception {
 		String jsonContent = "[\"AL#2018#5#9##10\"]";
 		when(customerSalesService.getSalesByDay()).thenReturn(Arrays.asList("AL#2018#5#9##10"));
-        this.mockMvc.perform(get("/spark/salesByDay")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().json(jsonContent));
-    }
-	
+		this.mockMvc.perform(get("/spark/salesByDay")).andDo(print()).andExpect(status().isOk())
+				.andExpect(content().json(jsonContent));
+	}
+
 	@Test
-    public void getSalesByYear() throws Exception {
+	public void getSalesByYear() throws Exception {
 		String jsonContent = "[\"AL#2018####100\"]";
 		when(customerSalesService.getSalesByYear()).thenReturn(Arrays.asList("AL#2018####100"));
-        this.mockMvc.perform(get("/spark/salesByYear")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().json(jsonContent));
-    }
+		this.mockMvc.perform(get("/spark/salesByYear")).andDo(print()).andExpect(status().isOk())
+				.andExpect(content().json(jsonContent));
+	}
 
 }
