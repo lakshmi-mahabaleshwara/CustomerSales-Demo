@@ -36,7 +36,7 @@ Junit 4.12<br>
 AWS
 
 #### Run the Application Locally:
-git clone git clone https://github.com/lakshmi-mahabaleshwara/CustomerSales-Demo.git<br>
+git clone https://github.com/lakshmi-mahabaleshwara/CustomerSales-Demo.git<br>
 mvn clean install<br>
 java -jar ~/CustomerSales-Demo/target/customersales-0.0.1-SNAPSHOT.jar<br>
 
