@@ -70,7 +70,7 @@ http://intuitcus-elasticl-11xxi0hlbd9bm-1213420232.us-west-1.elb.amazonaws.com/s
 
 #### AWS Deployment Diagram:
 
-![aH3lt text](/Users/lakshmimahabaleshwara/Desktop/Screen Shot 2018-05-11 at 1.53.15 PM.png?raw=true "Title")
+![aH3lt text](https://github.com/lakshmi-mahabaleshwara/CustomerSales-Demo/blob/master/Deployment_Diagram.png?raw=true "Title")
 
 #### Not Covered:
 1. https call (SSL certificate) <br>
