@@ -46,8 +46,8 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 	private final static String DAY = "day";
 	private final static String YEAR = "year";
 
-	private List<Tuple2<Integer, Tuple2<Sale, Customer>>> list;
-	private Set<Map.Entry<String, Iterable<Long>>> set;
+	private static List<Tuple2<Integer, Tuple2<Sale, Customer>>> list;
+	private static Set<Map.Entry<String, Iterable<Long>>> set;
 
 	@PostConstruct
 	public void initializeFile() throws Exception {
