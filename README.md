@@ -11,11 +11,11 @@ o	Sales information <timestamp,customer_id,sales_price>
 Implement a Spark application using Spark Core (not with Spark SQL) to get <state,total_sales> for (year, month, day and hour) granularities. Be prepared to present your code and demonstrate it running with appropriate input and output.
 
 Notes: 
-1.	You can consider input/output data set in any one of the below format
-a.	Text(with any DELIMITER)
-b.	AVRO
-c.	PARQUET
-2.	Consider timestamp in epoch (for example 1500674713)
+1.	You can consider input/output data set in any one of the below format<br>
+a.	Text(with any DELIMITER)<br>
+b.	AVRO<br>
+c.	PARQUET<br>
+2.	Consider timestamp in epoch (for example 1500674713)<br>
 3.	We encourage you to consider all possible cases of datasets like number of states are small(finitely known set) OR huge(unknown set) and come with appropriate solutions.
 
 You can you use any of PYTHON/SCALA/JAVA API’s of your choice.
@@ -37,26 +37,30 @@ AWS
 
 #### Configurable parameters:
 Below are the configurable parameters in application.properties file (inside jar)<br>
+	```
 	app.name=CustomerSales<br>
 	master.uri=local<br>
 	customer.file.path=input/customers.txt<br>
 	sales.file.path=input/sales.txt<br>
 	delimeter=#<br>
+	```
 
-During the start of the application, if --spring.config.location=<property file name> is not given above parameters are used from application.properties file which is inside jar<br>
+During the start of the application, if **--spring.config.location=property file name** is not given above parameters are used from application.properties file which is inside jar<br>
 
 There is an application.override.properties file(outside jar file), where we can configure the file format, delimiter and path. When application is started as below it overrides the parameters inside jar file.<br>
 
-java -jar target/customersales-0.0.1-SNAPSHOT.jar --spring.config.location=application.override.properties<br>
+**java -jar ~/CustomerSales-Demo/target/customersales-0.0.1-SNAPSHOT.jar --spring.config.location=application.override.properties**<br>
 
 ##### Use the file from s3
-1.source ./set-env.sh (export your AWS accesskey and accesssecret)<br>
-2.Configure below parameters to get from s3 in application.override.properties<br>
+- source ./set-env.sh (export your AWS accesskey and accesssecret)<br>
+- Configure below parameters to get from s3 in application.override.properties<br>
+	```
 	customer.file.path=s3n://bucket_name/filename<br>
 	sales.file.path=s3n://bucket_name/filename<br>
 	delimeter=delimiter<br>
+	```
 
-Start application as java -jar target/customersales-0.0.1-SNAPSHOT.jar --spring.config.location=application.override.properties<br>
+Start application as **java -jar ~/CustomerSales-Demo/target/customersales-0.0.1-SNAPSHOT.jar --spring.config.location=application.override.properties**<br>
 
 
 #### Run the Application Locally:
@@ -96,11 +100,13 @@ http://intuitcus-elasticl-11xxi0hlbd9bm-1213420232.us-west-1.elb.amazonaws.com/s
 
 ![aH3lt text](https://github.com/lakshmi-mahabaleshwara/CustomerSales-Demo/blob/master/Deployment_Diagram.png?raw=true "Title")
 
-#### Not Covered:
+#### Future Improvements:
 1. https call (SSL certificate) <br>
 2. User Authentication and Authorization for Rest call <br>
 3. Dynamic update of text file. (If the text file gets updated, we need to restart the Application to load the latest data)<br>
-4. Caching the data.<br>
+4. AWS IAM profile use.<br>
+5. Spark Cluster<br>
+6. Amazon EMR <br>
 
 #### References:
 https://www.udemy.com/apache-spark-course-with-java/learn/v4/overview<br>
