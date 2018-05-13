@@ -21,7 +21,7 @@ import scala.Tuple2;
 
 @RunWith(SpringRunner.class)
 public class CustomerSalesServiceTest {
-
+	
 	@InjectMocks
 	private CustomerSalesServiceImpl customerSalesService;
 
@@ -29,96 +29,98 @@ public class CustomerSalesServiceTest {
 	public void setup() throws Exception {
 		ReflectionTestUtils.setField(customerSalesService, "list", getListOfJoinedPairedRDD());
 		ReflectionTestUtils.setField(customerSalesService, "set", getSetOfJoinedPairedRDDValues());
+		ReflectionTestUtils.setField(customerSalesService, "CUSTOMER_FILE_PATH", "input/customers.txt");
+		ReflectionTestUtils.setField(customerSalesService, "SALES_FILE_PATH", "input/sales.txt");
+		ReflectionTestUtils.setField(customerSalesService, "DELIMITER", "#");
 	}
-
+	
 	private List<Tuple2<Integer, Tuple2<Sale, Customer>>> getListOfJoinedPairedRDD() throws Exception {
-		List<Tuple2<Integer, Tuple2<Sale, Customer>>> list = new ArrayList<Tuple2<Integer, Tuple2<Sale, Customer>>>();
+		List<Tuple2<Integer, Tuple2<Sale, Customer>>> list = new ArrayList<Tuple2<Integer,Tuple2<Sale,Customer>>>();
 		Sale s = new Sale("123", 1454313600l, 123456l);
 		Customer c = new Customer("AL");
-		Tuple2<Integer, Tuple2<Sale, Customer>> t = new Tuple2<Integer, Tuple2<Sale, Customer>>(123,
-				new Tuple2<Sale, Customer>(s, c));
+		Tuple2<Integer, Tuple2<Sale, Customer>> t = new Tuple2<Integer, Tuple2<Sale, Customer>>(123, new Tuple2<Sale, Customer>(s, c));
 		list.add(t);
 		return list;
 	}
-
+	
 	private Set<Map.Entry<String, Iterable<Long>>> getSetOfJoinedPairedRDDValues() throws Exception {
 		Map<String, Iterable<Long>> map = new HashMap<>();
-		Long[] values = { 100l, 200l, 300l };
+		Long[] values = {100l,200l,300l};
 		Iterable<Long> list = Arrays.asList(values);
 		map.put("AL", list);
-		return map.entrySet();
+		return map.entrySet();		
 	}
-
+	
 	@Test
-	public void testTotalSales() throws Exception {
+	public void testTotalSales() throws Exception{
 		List<String> list = customerSalesService.getStateTotalSales();
 		assertThat(list).isNotEmpty();
 		assertThat(list.size()).isEqualByComparingTo(1);
 		assertThat(list.get(0)).isEqualTo("AL#600");
 	}
-
+	
 	@Test
-	public void testSalesByHour() throws Exception {
+	public void testSalesByHour() throws Exception{
 		List<String> list = customerSalesService.getSalesByHour();
 		assertThat(list).isNotEmpty();
 		assertThat(list.size()).isEqualByComparingTo(1);
 		assertThat(list.get(0)).isEqualTo("AL#2016#2#1#8#123456");
 	}
-
+	
 	@Test
-	public void getSalesByDay() throws Exception {
+	public void getSalesByDay() throws Exception{
 		List<String> list = customerSalesService.getSalesByDay();
 		assertThat(list).isNotEmpty();
 		assertThat(list.size()).isEqualByComparingTo(1);
 		assertThat(list.get(0)).isEqualTo("AL#2016#2#1##123456");
 	}
-
+	
 	@Test
-	public void testSalesByMonth() throws Exception {
+	public void testSalesByMonth() throws Exception{
 		List<String> list = customerSalesService.getSalesByMonth();
 		assertThat(list).isNotEmpty();
 		assertThat(list.size()).isEqualByComparingTo(1);
 		assertThat(list.get(0)).isEqualTo("AL#2016#2###123456");
 	}
-
+	
 	@Test
-	public void testSalesByYear() throws Exception {
+	public void testSalesByYear() throws Exception{
 		List<String> list = customerSalesService.getSalesByYear();
 		assertThat(list).isNotEmpty();
 		assertThat(list.size()).isEqualByComparingTo(1);
 		assertThat(list.get(0)).isEqualTo("AL#2016####123456");
 	}
-
+	
 	@Test
-	public void testTotalSalesWhenSetIsNull() throws Exception {
+	public void testTotalSalesWhenSetIsNull() throws Exception{
 		ReflectionTestUtils.setField(customerSalesService, "set", null);
 		List<String> list = customerSalesService.getStateTotalSales();
 		assertThat(list).isEmpty();
 	}
-
+	
 	@Test
-	public void testSalesByMonthWhenListIsNull() throws Exception {
+	public void testSalesByMonthWhenListIsNull() throws Exception{
 		ReflectionTestUtils.setField(customerSalesService, "list", null);
 		List<String> list = customerSalesService.getSalesByMonth();
 		assertThat(list).isEmpty();
 	}
-
+	
 	@Test
-	public void testSalesByDayWhenListIsNull() throws Exception {
+	public void testSalesByDayWhenListIsNull() throws Exception{
 		ReflectionTestUtils.setField(customerSalesService, "list", null);
 		List<String> list = customerSalesService.getSalesByDay();
 		assertThat(list).isEmpty();
 	}
-
+	
 	@Test
-	public void testSalesByHourWhenListIsNull() throws Exception {
+	public void testSalesByHourWhenListIsNull() throws Exception{
 		ReflectionTestUtils.setField(customerSalesService, "list", null);
 		List<String> list = customerSalesService.getSalesByHour();
 		assertThat(list).isEmpty();
 	}
-
+	
 	@Test
-	public void testSalesByYearWhenListIsNull() throws Exception {
+	public void testSalesByYearWhenListIsNull() throws Exception{
 		ReflectionTestUtils.setField(customerSalesService, "list", null);
 		List<String> list = customerSalesService.getSalesByYear();
 		assertThat(list).isEmpty();

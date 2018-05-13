@@ -20,76 +20,76 @@ import org.springframework.test.context.junit4.SpringRunner;
 import scala.Tuple2;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { TestSparkConfig.class, SparkJoinRDD.class })
+@SpringBootTest(classes={TestSparkConfig.class, SparkJoinRDD.class})
 public class SparkJoinRDDTest {
-
+	
 	@Autowired
 	private SparkJoinRDD sparkJoinRDD;
-
+	
+	private static final String DELIMITER = "#";
+	
 	@Test
-	public void testGetCustomerRddFromTextFile() throws Exception {
-		JavaRDD<String> customerRdd = sparkJoinRDD.getCustomerRddFromTextFile("input/customers_test.txt");
+	public void testGetCustomerRddFromTextFile() throws Exception{
+		JavaRDD<String> customerRdd = sparkJoinRDD.getCustomerRddFromTextFile("input/customers_test.txt");	
 		assertThat(customerRdd).isNotNull();
 	}
-
+	
 	@Test
-	public void testGetSalesRddFromTextFile() throws Exception {
-		JavaRDD<String> salesRdd = sparkJoinRDD.getSalesRddFromTextFile("input/sales_test.txt");
+	public void testGetSalesRddFromTextFile() throws Exception{
+		JavaRDD<String> salesRdd = sparkJoinRDD.getSalesRddFromTextFile("input/sales_test.txt");	
 		assertThat(salesRdd).isNotNull();
 	}
-
+	
 	@Test
-	public void testGetCustomerRddFromTextFileWhenFileNotExists() throws Exception {
-		try {
-			sparkJoinRDD.getCustomerRddFromTextFile("input/doesnot_exists.txt");
-		} catch (FileNotFoundException e) {
+	public void testGetCustomerRddFromTextFileWhenFileNotExists() throws Exception{
+		try{
+			sparkJoinRDD.getCustomerRddFromTextFile("input/doesnot_exists.txt");	
+		}catch(FileNotFoundException e){
 			assertThat(e.getMessage()).isEqualTo("Text file path for customer is empty");
 		}
 	}
-
+	
 	@Test
-	public void testGetSalesRddFromTextFileWhenFileNotExists() throws Exception {
-		try {
-			sparkJoinRDD.getSalesRddFromTextFile("input/doesnot_exists.txt");
-		} catch (FileNotFoundException e) {
+	public void testGetSalesRddFromTextFileWhenFileNotExists() throws Exception{
+		try{
+			sparkJoinRDD.getSalesRddFromTextFile("input/doesnot_exists.txt");	
+		}catch(FileNotFoundException e){
 			assertThat(e.getMessage()).isEqualTo("Text file path for sales is empty");
 		}
 	}
-
+	
 	@Test
-	public void testGetListOfJoinedPairedRDD() throws Exception {
+	public void testGetListOfJoinedPairedRDD() throws Exception{
 		JavaRDD<String> customerRdd = sparkJoinRDD.getCustomerRddFromTextFile("input/customers_test.txt");
-		JavaRDD<String> salesRdd = sparkJoinRDD.getSalesRddFromTextFile("input/sales_test.txt");
-		List<Tuple2<Integer, Tuple2<Sale, Customer>>> list = sparkJoinRDD.getListOfJoinedPairedRDD(customerRdd,
-				salesRdd);
+		JavaRDD<String> salesRdd = sparkJoinRDD.getSalesRddFromTextFile("input/sales_test.txt");	
+		List<Tuple2<Integer, Tuple2<Sale, Customer>>> list = sparkJoinRDD.getListOfJoinedPairedRDD(customerRdd, salesRdd, DELIMITER);
 		assertThat(list).isNotEmpty();
 		assertThat(list.size()).isEqualByComparingTo(1);
 	}
-
+	
 	@Test
-	public void testGetListOfJoinedPairedRDDWhenNoContent() throws Exception {
+	public void testGetListOfJoinedPairedRDDWhenNoContent() throws Exception{
 		JavaRDD<String> customerRdd = sparkJoinRDD.getCustomerRddFromTextFile("input/customers_test_nocontent.txt");
-		JavaRDD<String> salesRdd = sparkJoinRDD.getSalesRddFromTextFile("input/sales_test_nocontent.txt");
-		List<Tuple2<Integer, Tuple2<Sale, Customer>>> list = sparkJoinRDD.getListOfJoinedPairedRDD(customerRdd,
-				salesRdd);
+		JavaRDD<String> salesRdd = sparkJoinRDD.getSalesRddFromTextFile("input/sales_test_nocontent.txt");	
+		List<Tuple2<Integer, Tuple2<Sale, Customer>>> list = sparkJoinRDD.getListOfJoinedPairedRDD(customerRdd, salesRdd, DELIMITER);
 		assertThat(list).isEmpty();
 		assertThat(list.size()).isEqualByComparingTo(0);
 	}
-
+	
 	@Test
-	public void testGetSetOfJoinedPairedRDDValues() throws Exception {
+	public void testGetSetOfJoinedPairedRDDValues() throws Exception{
 		JavaRDD<String> customerRdd = sparkJoinRDD.getCustomerRddFromTextFile("input/customers_test.txt");
-		JavaRDD<String> salesRdd = sparkJoinRDD.getSalesRddFromTextFile("input/sales_test.txt");
-		Set<Map.Entry<String, Iterable<Long>>> set = sparkJoinRDD.getSetOfJoinedPairedRDDValues(customerRdd, salesRdd);
+		JavaRDD<String> salesRdd = sparkJoinRDD.getSalesRddFromTextFile("input/sales_test.txt");	
+		Set<Map.Entry<String, Iterable<Long>>> set = sparkJoinRDD.getSetOfJoinedPairedRDDValues(customerRdd, salesRdd, DELIMITER);
 		assertThat(set).isNotEmpty();
 		assertThat(set.size()).isEqualByComparingTo(1);
 	}
-
+	
 	@Test
-	public void testGetSetOfJoinedPairedRDDValuesWhenNoContent() throws Exception {
+	public void testGetSetOfJoinedPairedRDDValuesWhenNoContent() throws Exception{
 		JavaRDD<String> customerRdd = sparkJoinRDD.getCustomerRddFromTextFile("input/customers_test_nocontent.txt");
-		JavaRDD<String> salesRdd = sparkJoinRDD.getSalesRddFromTextFile("input/sales_test_nocontent.txt");
-		Set<Map.Entry<String, Iterable<Long>>> set = sparkJoinRDD.getSetOfJoinedPairedRDDValues(customerRdd, salesRdd);
+		JavaRDD<String> salesRdd = sparkJoinRDD.getSalesRddFromTextFile("input/sales_test_nocontent.txt");	
+		Set<Map.Entry<String, Iterable<Long>>> set = sparkJoinRDD.getSetOfJoinedPairedRDDValues(customerRdd, salesRdd, DELIMITER);
 		assertThat(set).isEmpty();
 		assertThat(set.size()).isEqualByComparingTo(0);
 	}

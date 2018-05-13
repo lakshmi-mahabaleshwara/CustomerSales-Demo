@@ -33,14 +33,16 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 
 	@Autowired
 	private SparkJoinRDD sparkJoinRDD;
-
+	
+	@Value("${delimiter:#}")
+	private String DELIMITER;
+	
 	@Value("${customer.file.path:input/customers.txt}")
 	private String CUSTOMER_FILE_PATH;
 
 	@Value("${sales.file.path:input/sales.txt}")
 	private String SALES_FILE_PATH;
 
-	private final static String DELIMITER = "#";
 	private final static String MONTH = "month";
 	private final static String HOUR = "hour";
 	private final static String DAY = "day";
@@ -54,8 +56,8 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 		try {
 			JavaRDD<String> customerRdd = sparkJoinRDD.getCustomerRddFromTextFile(CUSTOMER_FILE_PATH);
 			JavaRDD<String> salesRdd = sparkJoinRDD.getCustomerRddFromTextFile(SALES_FILE_PATH);
-			list = sparkJoinRDD.getListOfJoinedPairedRDD(customerRdd, salesRdd);
-			set = sparkJoinRDD.getSetOfJoinedPairedRDDValues(customerRdd, salesRdd);
+			list = sparkJoinRDD.getListOfJoinedPairedRDD(customerRdd, salesRdd, DELIMITER);
+			set = sparkJoinRDD.getSetOfJoinedPairedRDDValues(customerRdd, salesRdd, DELIMITER);
 		} catch (Exception e) {
 			LOGGER.error("Error occured while joining the customer and sales RDD : " + e.getMessage());
 			throw e;
@@ -64,19 +66,18 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 
 	/**
 	 * Returns the total sales for the state.
-	 * 
 	 * @returns List<String> in the format "AL#247316"
 	 */
 	@Override
 	public List<String> getStateTotalSales() throws Exception {
 		List<String> result = new ArrayList<>();
 		try {
-
-			if (set == null) {
+			
+			if(set == null) {
 				LOGGER.error("Set is empty while calculating total sales");
 				return result;
 			}
-
+			
 			for (Map.Entry<String, Iterable<Long>> sales : set) {
 				long total = 0;
 				Iterator<Long> itr = sales.getValue().iterator();
@@ -97,7 +98,6 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 
 	/**
 	 * Returns the Sales by hour for given state
-	 * 
 	 * @returns List<String> in the format "AL#2018#5#9#12#100"
 	 */
 	@Override
@@ -107,7 +107,6 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 
 	/**
 	 * Returns the Sales by month for given state
-	 * 
 	 * @returns List<String> in the format "AL#2018#5###100"
 	 */
 	@Override
@@ -117,7 +116,6 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 
 	/**
 	 * Returns the Sales by day for given state
-	 * 
 	 * @returns List<String> in the format ""AL#2018#5#9##100""
 	 */
 	@Override
@@ -127,7 +125,6 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 
 	/**
 	 * Returns the Sales by year for given state
-	 * 
 	 * @returns List<String> in the format ""AL#2018####100""
 	 */
 	@Override
@@ -141,11 +138,11 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 	private List<String> getResultsFromRdd(String param) throws Exception {
 		List<String> result = new ArrayList<>();
 		try {
-			if (list == null) {
+			if(list == null) {
 				LOGGER.error("List is empty while getting sales by " + param + " for state");
 				return result;
 			}
-
+			
 			for (Tuple2<Integer, Tuple2<Sale, Customer>> tuple : list) {
 				Tuple2<Sale, Customer> tuple2 = (Tuple2<Sale, Customer>) tuple._2();
 				Sale sale = (Sale) tuple2._1();
@@ -169,7 +166,7 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 	/**
 	 * Returns the state and sales price with delimiter for hour granularity
 	 */
-	private static List<String> addYearMonthDayHour(List<String> result, String state, Long sales, long epoch) {
+	private List<String> addYearMonthDayHour(List<String> result, String state, Long sales, long epoch) {
 		ZonedDateTime date = getDate(epoch);
 		StringBuilder builder = new StringBuilder();
 		builder.append(state).append(DELIMITER).append(date.getYear()).append(DELIMITER).append(date.getMonthValue())
@@ -182,7 +179,7 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 	/**
 	 * Returns the state and sales price with delimiter for day granularity
 	 */
-	private static List<String> addYearMonthDay(List<String> result, String state, Long sales, long epoch) {
+	private List<String> addYearMonthDay(List<String> result, String state, Long sales, long epoch) {
 		ZonedDateTime date = getDate(epoch);
 		StringBuilder builder = new StringBuilder();
 		builder.append(state).append(DELIMITER).append(date.getYear()).append(DELIMITER).append(date.getMonthValue())
@@ -194,7 +191,7 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 	/**
 	 * Returns the state and sales price with delimiter for month granularity
 	 */
-	private static List<String> addYearMonth(List<String> result, String state, Long sales, long epoch) {
+	private List<String> addYearMonth(List<String> result, String state, Long sales, long epoch) {
 		ZonedDateTime date = getDate(epoch);
 		StringBuilder builder = new StringBuilder();
 		builder.append(state).append(DELIMITER).append(date.getYear()).append(DELIMITER).append(date.getMonthValue())
@@ -206,7 +203,7 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 	/**
 	 * Returns the state and sales price with delimiter for year granularity
 	 */
-	private static List<String> addYear(List<String> result, String state, Long sales, long epoch) {
+	private List<String> addYear(List<String> result, String state, Long sales, long epoch) {
 		ZonedDateTime date = getDate(epoch);
 		StringBuilder builder = new StringBuilder();
 		builder.append(state).append(DELIMITER).append(date.getYear()).append(DELIMITER).append(DELIMITER)
