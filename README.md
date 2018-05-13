@@ -38,11 +38,11 @@ AWS
 #### Configurable parameters:
 Below are the configurable parameters in application.properties file (inside jar)<br>
 	```
-	app.name=CustomerSales<br>
-	master.uri=local<br>
-	customer.file.path=input/customers.txt<br>
-	sales.file.path=input/sales.txt<br>
-	delimeter=#<br>
+	app.name=CustomerSales	
+	master.uri=local
+	customer.file.path=input/customers.txt
+	sales.file.path=input/sales.txt
+	delimeter=#
 	```
 
 During the start of the application, if **--spring.config.location=property file name** is not given above parameters are used from application.properties file which is inside jar<br>
@@ -55,9 +55,9 @@ There is an application.override.properties file(outside jar file), where we can
 - source ./set-env.sh (export your AWS accesskey and accesssecret)<br>
 - Configure below parameters to get from s3 in application.override.properties<br>
 	```
-	customer.file.path=s3n://bucket_name/filename<br>
-	sales.file.path=s3n://bucket_name/filename<br>
-	delimeter=delimiter<br>
+	customer.file.path=s3n://bucket_name/filename
+	sales.file.path=s3n://bucket_name/filename
+	delimeter=delimiter
 	```
 
 Start application as **java -jar ~/CustomerSales-Demo/target/customersales-0.0.1-SNAPSHOT.jar --spring.config.location=application.override.properties**<br>
