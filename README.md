@@ -21,7 +21,7 @@ c.	PARQUET
 You can you use any of PYTHON/SCALA/JAVA API’s of your choice.
 
 #### Assumptions:
-1. Customer and Sales datasets are provided from HDFS and stored in local file system under input folder with name customers.txt and sales.txt<br>
+1. Customer and Sales datasets are provided in HDFS.<br>
 2. No Headers in the customers and sales text file.<br>
 3. “#” is used as delimiter in text files.<br>
 
@@ -35,10 +35,34 @@ Swagger 2<br>
 Junit 4.12<br>
 AWS
 
+#### Configurable parameters:
+Below are the configurable parameters in application.properties file (inside jar)<br>
+	app.name=CustomerSales<br>
+	master.uri=local<br>
+	customer.file.path=input/customers.txt<br>
+	sales.file.path=input/sales.txt<br>
+	delimeter=#<br>
+
+During the start of the application, if --spring.config.location=<property file name> is not given above parameters are used from application.properties file which is inside jar<br>
+
+There is an application.override.properties file(outside jar file), where we can configure the file format, delimiter and path. When application is started as below it overrides the parameters inside jar file.<br>
+
+java -jar target/customersales-0.0.1-SNAPSHOT.jar --spring.config.location=application.override.properties<br>
+
+##### Use the file from s3
+1.source ./set-env.sh (export your AWS accesskey and accesssecret)<br>
+2.Configure below parameters to get from s3 in application.override.properties<br>
+	customer.file.path=s3n://bucket_name/filename<br>
+	sales.file.path=s3n://bucket_name/filename<br>
+	delimeter=delimiter<br>
+
+Start application as java -jar target/customersales-0.0.1-SNAPSHOT.jar --spring.config.location=application.override.properties<br>
+
+
 #### Run the Application Locally:
 git clone https://github.com/lakshmi-mahabaleshwara/CustomerSales-Demo.git<br>
 mvn clean install<br>
-java -jar ~/CustomerSales-Demo/target/customersales-0.0.1-SNAPSHOT.jar<br>
+java -jar ~/CustomerSales-Demo/target/customersales-0.0.1-SNAPSHOT.jar (Uses the application.properties file from jar)<br>
 
 #### Healthcheck endpoint
 http://localhost:8080/health <br>
