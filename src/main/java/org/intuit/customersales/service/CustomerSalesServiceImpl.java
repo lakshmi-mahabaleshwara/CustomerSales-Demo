@@ -4,11 +4,12 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.annotation.PostConstruct;
+
 import org.apache.spark.api.java.JavaRDD;
 import org.intuit.customersales.config.SparkJoinRDD;
 import org.intuit.customersales.entity.Customer;
@@ -49,7 +50,7 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 	private final static String YEAR = "year";
 
 	private static List<Tuple2<Integer, Tuple2<Sale, Customer>>> list;
-	private static Set<Map.Entry<String, Iterable<Long>>> set;
+	private static Set<Map.Entry<String, Long>> set;
 
 	@PostConstruct
 	public void initializeFile() throws Exception {
@@ -78,14 +79,9 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 				return result;
 			}
 			
-			for (Map.Entry<String, Iterable<Long>> sales : set) {
-				long total = 0;
-				Iterator<Long> itr = sales.getValue().iterator();
-				while (itr.hasNext()) {
-					total = total + itr.next();
-				}
+			for (Map.Entry<String, Long> sales : set) {
 				StringBuilder builder = new StringBuilder();
-				builder.append(sales.getKey()).append(DELIMITER).append(total);
+				builder.append(sales.getKey()).append(DELIMITER).append(sales.getValue());
 				result.add(builder.toString());
 			}
 			LOGGER.info("Result size :" + result.size());

@@ -2,13 +2,14 @@ package org.intuit.customersales.config;
 
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.Function2;
 import org.intuit.customersales.entity.Customer;
 import org.intuit.customersales.entity.Sale;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,12 +57,11 @@ public class SparkJoinRDD {
 	 * Joined paired RDD returns result in <Key,Value> pair like [customerId, Tuple2<Sale, Customer>]
 	 * Once RDD is merged w.r.t customerId, we need to group by states to calculate the total price.
 	 * So taking values from the joined paired RDD and again creating pair RDD for String and Price like [state,price]
-	 * GroupBy gives RDD with [state, iterable<price>].
-	 * Looping this values and adding gives the total price for that state.
+	 * ReduceByKey gives RDD with [state, totalSalesPrice].
 	 * @return
 	 * @throws Exception
 	 */
-	public Set<Map.Entry<String, Iterable<Long>>> getSetOfJoinedPairedRDDValues(JavaRDD<String> customerRdd, JavaRDD<String> salesRdd, String delimiter) throws Exception {
+	public Set<Entry<String, Long>> getSetOfJoinedPairedRDDValues(JavaRDD<String> customerRdd, JavaRDD<String> salesRdd, String delimiter) throws Exception {
 		JavaRDD<Tuple2<Sale, Customer>> valuesRdd = getJoinedPairRdd(customerRdd, salesRdd, delimiter).values();
         
         JavaPairRDD<String, Long> stateCustomerSalesRdd = valuesRdd.mapToPair(t -> {        	
@@ -70,7 +70,7 @@ public class SparkJoinRDD {
                 return new Tuple2<String, Long>(state, salesPrice);
         });
 
-        JavaPairRDD<String, Iterable<Long>> salesByState = stateCustomerSalesRdd.groupByKey();  
+        JavaPairRDD<String, Long> salesByState = stateCustomerSalesRdd.reduceByKey((Function2<Long, Long, Long>) (x, y) -> x + y);
         return salesByState.collectAsMap().entrySet();				
 	}
 	/**

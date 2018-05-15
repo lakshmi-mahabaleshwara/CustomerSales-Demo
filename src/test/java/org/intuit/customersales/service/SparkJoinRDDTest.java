@@ -80,7 +80,7 @@ public class SparkJoinRDDTest {
 	public void testGetSetOfJoinedPairedRDDValues() throws Exception{
 		JavaRDD<String> customerRdd = sparkJoinRDD.getCustomerRddFromTextFile("input/customers_test.txt");
 		JavaRDD<String> salesRdd = sparkJoinRDD.getSalesRddFromTextFile("input/sales_test.txt");	
-		Set<Map.Entry<String, Iterable<Long>>> set = sparkJoinRDD.getSetOfJoinedPairedRDDValues(customerRdd, salesRdd, DELIMITER);
+		Set<Map.Entry<String, Long>> set = sparkJoinRDD.getSetOfJoinedPairedRDDValues(customerRdd, salesRdd, DELIMITER);
 		assertThat(set).isNotEmpty();
 		assertThat(set.size()).isEqualByComparingTo(1);
 	}
@@ -89,7 +89,7 @@ public class SparkJoinRDDTest {
 	public void testGetSetOfJoinedPairedRDDValuesWhenNoContent() throws Exception{
 		JavaRDD<String> customerRdd = sparkJoinRDD.getCustomerRddFromTextFile("input/customers_test_nocontent.txt");
 		JavaRDD<String> salesRdd = sparkJoinRDD.getSalesRddFromTextFile("input/sales_test_nocontent.txt");	
-		Set<Map.Entry<String, Iterable<Long>>> set = sparkJoinRDD.getSetOfJoinedPairedRDDValues(customerRdd, salesRdd, DELIMITER);
+		Set<Map.Entry<String, Long>> set = sparkJoinRDD.getSetOfJoinedPairedRDDValues(customerRdd, salesRdd, DELIMITER);
 		assertThat(set).isEmpty();
 		assertThat(set.size()).isEqualByComparingTo(0);
 	}

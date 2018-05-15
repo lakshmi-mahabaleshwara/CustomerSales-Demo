@@ -3,11 +3,11 @@ package org.intuit.customersales.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.intuit.customersales.entity.Customer;
 import org.intuit.customersales.entity.Sale;
 import org.junit.Before;
@@ -43,11 +43,14 @@ public class CustomerSalesServiceTest {
 		return list;
 	}
 	
-	private Set<Map.Entry<String, Iterable<Long>>> getSetOfJoinedPairedRDDValues() throws Exception {
-		Map<String, Iterable<Long>> map = new HashMap<>();
+	private Set<Map.Entry<String, Long>> getSetOfJoinedPairedRDDValues() throws Exception {
+		Map<String, Long> map = new HashMap<>();
 		Long[] values = {100l,200l,300l};
-		Iterable<Long> list = Arrays.asList(values);
-		map.put("AL", list);
+		Long total = 0l;
+		for(Long l: values) {
+			total = total+l;
+		}		
+		map.put("AL", total);
 		return map.entrySet();		
 	}
 	
