@@ -211,7 +211,7 @@ public class CustomerSalesServiceImpl implements CustomerSalesService {
 	/**
 	 * Returns the ZonedDateTime from epoch time
 	 */
-	private static ZonedDateTime getDate(long epoch) {
+	private ZonedDateTime getDate(long epoch) {
 		Instant instant = Instant.ofEpochSecond(epoch);
 		ZonedDateTime date = ZonedDateTime.ofInstant(instant, ZoneOffset.UTC);
 		return date;
